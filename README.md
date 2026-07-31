@@ -3,17 +3,25 @@
 An audio-reactive orb for AI voice interfaces — the visual presence of an agent that is idle,
 listening, thinking, or speaking.
 
-Currently at the **design-foundation** stage: the visual language is defined and prototyped, the
-component is not yet built.
+Zero runtime dependencies. One WebGL fragment program renders all five finishes; nothing is
+fetched at runtime.
 
 ## What's here
 
 | Path | What it is |
 |---|---|
-| [`docs/style-guide.md`](docs/style-guide.md) | The orb design language — six archetypes, eight-layer anatomy, ten principles, anti-patterns |
+| [`src/`](src) | The component: `<Orb>`, `useOrbAudio`, and a framework-agnostic `OrbRenderer` |
+| [`playground/`](playground) | A Vite app exercising every finish, palette, state, size and the chat-avatar case |
+| [`docs/style-guide.md`](docs/style-guide.md) | The orb design language — six archetypes, eight-layer anatomy, eleven principles, anti-patterns |
 | [`demo/index.html`](demo/index.html) | The same guide as a live page: every archetype rendered in real WebGL, plus a specimen that reacts to your microphone |
 
-Open the demo with any static server:
+```bash
+npm install
+npm run dev        # playground at http://localhost:5178
+npm run typecheck
+```
+
+The static style guide needs no build at all:
 
 ```bash
 python3 -m http.server 8080 --directory demo
@@ -41,23 +49,46 @@ with a rim light holding the silhouette. Recolouring one into the other produces
 amplitude, core brightness. Input belongs to the boundary — a ring travelling outward, rim lift,
 filaments reaching. When both signals are just "bigger", the orb stops reporting who holds the turn.
 
-## Planned API
+## API
 
 ```tsx
-<Orb
-  finish="ink"              // ink | pearl | vessel | aurora | plasma
-  palette="ember"           // named preset, or colors={[...]}, or inherit
-  state="listening"         // idle | listening | thinking | speaking
-  inputLevelRef={micRef}    // refs, not props — no re-render per frame
-  outputLevelRef={agentRef}
-  seed={3}
-  grain={0.35}
-  className="size-32"
-/>
+import { Orb, useOrbAudio } from "ai-orb"
+
+function Assistant({ agentAudio }: { agentAudio: HTMLAudioElement }) {
+  const output = useOrbAudio(agentAudio)   // returns a ref, not state
+  const input = useOrbAudio(micStream)
+
+  return (
+    <Orb
+      finish="ink"                 // ink | pearl | vessel | aurora | plasma
+      palette="ember"              // or colors={[a, b, c]} / bodyColor
+      state="listening"            // idle | listening | thinking | speaking
+      outputLevelRef={output}      // drives the body
+      inputLevelRef={input}        // drives the boundary
+      className="size-32"
+    />
+  )
+}
 ```
 
-Levels arrive as **refs read inside the animation loop**, never as props. Passing a 60 Hz signal
-through React state re-renders the tree every frame.
+Levels are read **inside the animation loop**, never through React state — a talking agent would
+otherwise re-render the tree sixty times a second. A ref, a getter, or a plain number all work.
+
+| Prop | Default | Notes |
+|---|---|---|
+| `finish` | `"ink"` | `pearl` becomes `aurora` on a dark page; it is never recoloured |
+| `palette` | per finish | `ember`, `iris`, `moss`, `porcelain`, `spectrum`, `discharge` |
+| `colors` / `bodyColor` | — | Any CSS colour; overrides the palette |
+| `field` | follows the page | Forces a light model. `aurora`/`plasma` are always dark, `pearl` always light |
+| `state` | `"idle"` | `thinking` adds an orbiting sweep with no audio involved |
+| `grain` | `0.05` | Fades out automatically below ~96px |
+| `seed` | `0` | Decorrelates orbs shown together |
+| `speed` | `1` | Ambient only; audio acceleration is separate |
+| `pointerReactive` | `true` | `plasma` filaments follow the pointer; ignored elsewhere |
+
+**Behaviour that is automatic:** DPR capped at 2, paused off-screen and on hidden tabs, a single
+still frame under `prefers-reduced-motion`, a CSS-gradient fallback with no WebGL, detail reduced at
+small sizes, and recovery from WebGL context loss.
 
 ## Constraints
 

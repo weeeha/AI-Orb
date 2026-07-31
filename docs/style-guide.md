@@ -170,6 +170,19 @@ Give the two audio signals different anatomy, not different amplitudes of the sa
 
 When both signals are just "bigger", the orb stops reporting who holds the turn.
 
+### P11 · Detail is a function of size
+Discovered while building the component, not while reviewing the references — every reference is a
+hero render, so none of them had to survive being 32px in a chat transcript.
+
+Grain, striations and thin filaments are the finest scale in the taxonomy, and below roughly 96px
+they stop reading as texture and start reading as dither. Worse, at avatar sizes they alias against
+the pixel grid and shimmer while the orb rotates. The orb must therefore reduce its own detail as it
+shrinks: fade grain out, drop striations, and widen filaments so they stay legible lines rather than
+dissolving into noise.
+
+What survives all the way down is the silhouette, the value structure, and the specular. What must
+go is anything whose feature size approaches one pixel.
+
 ---
 
 ## 4 · Anti-patterns
@@ -185,6 +198,7 @@ When both signals are just "bigger", the orb stops reporting who holds the turn.
 | One meter for both voices | Input and output collapse into a single wobble; turn-taking becomes unreadable (P10) |
 | Level piped through React state | A re-render every animation frame — the loop must read a ref |
 | Runtime texture from a CDN | Breaks offline dev, strict CSP, air-gapped installs — the one real flaw in ElevenLabs UI's shipped orb |
+| Same detail at every size | Grain and filaments become dither and shimmer on a 32px avatar (P11) |
 
 ---
 
@@ -202,6 +216,10 @@ When both signals are just "bigger", the orb stops reporting who holds the turn.
 6. **Silhouette stays rigid** (P2). The Dribbble wobble is not adopted.
 7. **States differ in form, not only tempo** (P8).
 8. **No runtime asset fetches.** Noise is generated in-shader; nothing is loaded from a CDN.
+9. **Detail scales with rendered size** (P11), measured in CSS pixels rather than device pixels — a
+   32px avatar on a 3x display is still a 32px avatar to the eye.
+10. **Finishes with their own light model do not follow the page.** `aurora` and `plasma` are dark
+    objects wherever they sit; `pearl` is a light one. Only `ink` and `vessel` adapt.
 
 **Open question:** whether `vessel`/`plasma` and `ink` can share one fragment shader with a branch,
 or need separate programs. They share sphere-bulge, shell, grain and colour-ramp; they differ in
