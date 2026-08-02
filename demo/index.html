@@ -1,0 +1,1489 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A taxonomy and style guide for AI-presence orbs: six archetypes, an eight-layer anatomy, eleven principles, and a live voice-reactive specimen.">
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}</style>
+</head>
+<body>
+<title>Orb Design Language</title>
+
+<style>
+  :root {
+    --ground: #edeff2;
+    --surface: #ffffff;
+    --ink: #12151a;
+    --muted: #69717d;
+    --rule: #d7dce3;
+    --rule-soft: #e6eaef;
+    --accent: #0d757f;
+    --accent-soft: #d7ecee;
+    --stage: #f5f6f8;
+
+    --display: "Helvetica Neue", "Helvetica", "Arial Nova", system-ui, sans-serif;
+    --body: Charter, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+    --measure: 66ch;
+    --gutter: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ground: #0a0c0f;
+      --surface: #14181f;
+      --ink: #e7ebf1;
+      --muted: #8b94a1;
+      --rule: #262d37;
+      --rule-soft: #1c222b;
+      --accent: #46c9d4;
+      --accent-soft: #103139;
+      --stage: #0f131a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #0a0c0f;
+    --surface: #14181f;
+    --ink: #e7ebf1;
+    --muted: #8b94a1;
+    --rule: #262d37;
+    --rule-soft: #1c222b;
+    --accent: #46c9d4;
+    --accent-soft: #103139;
+    --stage: #0f131a;
+  }
+
+  :root[data-theme="light"] {
+    --ground: #edeff2;
+    --surface: #ffffff;
+    --ink: #12151a;
+    --muted: #69717d;
+    --rule: #d7dce3;
+    --rule-soft: #e6eaef;
+    --accent: #0d757f;
+    --accent-soft: #d7ecee;
+    --stage: #f5f6f8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 var(--gutter) 6rem; }
+
+  /* ---------- type ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.7rem, 7vw, 5rem);
+    line-height: .96;
+    letter-spacing: -.035em;
+    text-wrap: balance;
+    margin: .5rem 0 0;
+  }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.45rem, 3.2vw, 2.05rem);
+    letter-spacing: -.022em;
+    line-height: 1.1;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.32rem;
+    letter-spacing: -.018em;
+    margin: 0;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+  a { color: var(--accent); }
+  strong { font-weight: 600; }
+  code { font-family: var(--mono); font-size: .88em; }
+
+  .lede {
+    font-size: clamp(1.05rem, 2.1vw, 1.3rem);
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 52ch;
+  }
+
+  .note { font-size: .95rem; color: var(--muted); }
+
+  section { padding-top: 4.5rem; }
+
+  .section-head {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    padding-bottom: 1.75rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding: clamp(3rem, 8vw, 5.5rem) 0 1rem;
+  }
+
+  @media (min-width: 860px) { .hero { grid-template-columns: 1.15fr .85fr; gap: 3.5rem; } }
+
+  .hero-copy { display: flex; flex-direction: column; gap: 1.5rem; }
+  .hero-stage { display: flex; align-items: center; justify-content: center; padding: 1rem; }
+
+  .specimen { position: relative; border-radius: 50%; overflow: hidden; isolation: isolate; }
+  .specimen canvas { display: block; width: 100%; height: 100%; }
+
+  .specimen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(128, 138, 150, .18);
+    pointer-events: none;
+  }
+
+  .specimen-hero { width: min(380px, 78vw); aspect-ratio: 1; }
+
+  /* ---------- corpus ---------- */
+  ul.corpus {
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+  }
+
+  .corpus li {
+    background: var(--surface);
+    padding: .9rem 1rem;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .18rem;
+  }
+
+  .corpus .t { font-family: var(--display); font-weight: 600; font-size: .95rem; letter-spacing: -.01em; }
+  .corpus .m { font-family: var(--mono); font-size: .68rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* ---------- layer stack ---------- */
+  .strata { display: flex; flex-direction: column; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); }
+
+  .stratum {
+    display: grid;
+    grid-template-columns: 2.6rem 8.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    background: var(--surface);
+    padding: .8rem 1rem;
+  }
+
+  @media (max-width: 620px) {
+    .stratum { grid-template-columns: 2.2rem 1fr; }
+    .stratum .sdesc { grid-column: 2; }
+  }
+
+  .snum { font-family: var(--mono); font-size: .78rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .sname { font-family: var(--display); font-weight: 600; font-size: .95rem; letter-spacing: -.008em; }
+  .sdesc { font-size: .95rem; color: var(--muted); }
+
+  /* ---------- reaction lab ---------- */
+  .lab {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  }
+
+  @media (min-width: 820px) { .lab { grid-template-columns: minmax(260px, 340px) 1fr; gap: 3rem; align-items: start; } }
+
+  .lab-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--stage);
+    padding: 1.75rem 1.25rem;
+    border: 1px solid var(--rule-soft);
+  }
+
+  .specimen-lab { width: min(260px, 62vw); aspect-ratio: 1; }
+
+  .statereadout {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .statereadout b { color: var(--accent); font-weight: 400; }
+
+  .controls { display: flex; flex-direction: column; gap: 1.5rem; }
+  .ctl { display: flex; flex-direction: column; gap: .65rem; }
+
+  .ctl-label {
+    font-family: var(--mono);
+    font-size: .64rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .btnrow { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+  button {
+    font-family: var(--mono);
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: .55rem .85rem;
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  button[disabled] { opacity: .45; cursor: not-allowed; }
+
+  .meters { display: flex; flex-direction: column; gap: .75rem; }
+  .meter { display: grid; grid-template-columns: 5.5rem 1fr 3rem; gap: .75rem; align-items: center; }
+
+  .meter-name, .meter-val {
+    font-family: var(--mono);
+    font-size: .68rem;
+    letter-spacing: .06em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .meter-val { text-align: right; }
+
+  .bar { height: 4px; background: var(--rule-soft); position: relative; overflow: hidden; }
+  .bar span { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--accent); }
+
+  .labnote {
+    font-size: .93rem;
+    color: var(--muted);
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 1rem;
+  }
+
+  /* ---------- plates ---------- */
+  .plates { display: flex; flex-direction: column; gap: 1px; background: var(--rule-soft); border: 1px solid var(--rule-soft); }
+
+  .plate {
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: clamp(1.5rem, 3.5vw, 2.5rem);
+    align-items: start;
+  }
+
+  @media (min-width: 780px) { .plate { grid-template-columns: 260px 1fr; gap: 2.5rem; } }
+
+  .plate-stage { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .specimen-plate { width: 100%; max-width: 240px; aspect-ratio: 1; }
+  .plate-body { display: flex; flex-direction: column; gap: 1rem; }
+  .plate-title { display: flex; align-items: baseline; gap: .75rem; flex-wrap: wrap; }
+
+  .verdict {
+    font-family: var(--mono);
+    font-size: .66rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .28rem .5rem;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+  }
+  .verdict.adopt { color: var(--accent); border-color: var(--accent); }
+
+  dl.facts {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: .9rem 1.5rem;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 1rem;
+  }
+
+  .fact { display: flex; flex-direction: column; gap: .2rem; }
+  .fact dt { font-family: var(--mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .fact dd { margin: 0; font-size: .92rem; font-family: var(--display); font-weight: 500; }
+
+  /* ---------- principles ---------- */
+  .principles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+  }
+
+  .principle { background: var(--surface); padding: 1.4rem; display: flex; flex-direction: column; gap: .5rem; }
+  .pid { font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; color: var(--accent); }
+  .principle p { font-size: .95rem; }
+
+  /* ---------- table ---------- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--rule-soft); }
+  table { border-collapse: collapse; width: 100%; min-width: 520px; background: var(--surface); }
+  th, td { text-align: left; padding: .8rem 1rem; border-bottom: 1px solid var(--rule-soft); font-size: .93rem; vertical-align: top; }
+  th { font-family: var(--mono); font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  td:first-child { font-family: var(--display); font-weight: 600; letter-spacing: -.008em; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ---------- consequences ---------- */
+  ol.consequences {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    padding: 0;
+    margin: 0;
+  }
+
+  .consequences li {
+    background: var(--surface);
+    list-style: none;
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: 1.9rem 1fr;
+    gap: .75rem;
+    font-size: .96rem;
+  }
+
+  .consequences .cnum { font-family: var(--mono); font-size: .74rem; color: var(--accent); }
+
+  footer {
+    margin-top: 5rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .06em;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.5rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Design system foundation &middot; Super-AI-Components</p>
+      <h1>The orb, taken apart</h1>
+      <p class="lede">
+        Eleven AI-presence orbs, reviewed frame by frame &mdash; two of them by reading the shipped
+        shader source. They turn out to be five species of one organism, assembled from the same
+        eight layers.
+      </p>
+      <p class="note">
+        Every orb here is live WebGL running the archetype it describes, and the one in
+        <a href="#reaction">Reaction</a> listens to your microphone. Nothing on this page is a video.
+      </p>
+    </div>
+    <div class="hero-stage">
+      <div class="specimen specimen-hero"><canvas data-mode="0"></canvas></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Corpus</p>
+      <h2>What was reviewed</h2>
+      <p>Two live implementations were read at source level; the nine motion pieces were scrubbed
+        across their full duration rather than judged from a poster frame.</p>
+    </div>
+    <ul class="corpus">
+      <li><span class="t">ElevenLabs homepage</span><span class="m">SHADER SOURCE &middot; FLUID SIM</span></li>
+      <li><span class="t">ElevenLabs UI <code>orb</code></span><span class="m">SHADER SOURCE &middot; MIT</span></li>
+      <li><span class="t">Orb AI Motion</span><span class="m">LALIT / THEOSM &middot; 15.0s</span></li>
+      <li><span class="t">AI Motion Visual</span><span class="m">LALIT &middot; 11.0s</span></li>
+      <li><span class="t">AI sphere for Pryon</span><span class="m">MILKINSIDE &middot; 5.8s</span></li>
+      <li><span class="t">Cirus Intelligence Sphere</span><span class="m">MILKINSIDE &middot; 5.0s</span></li>
+      <li><span class="t">Thinking Reaction</span><span class="m">G. KUZNETSOV &middot; 1.5s</span></li>
+      <li><span class="t">Colorful AI sphere</span><span class="m">G. KUZNETSOV &middot; 23.6s</span></li>
+      <li><span class="t">Night mode for AI assistant</span><span class="m">G. KUZNETSOV &middot; 20.0s</span></li>
+      <li><span class="t">Voice reaction for AI symbol</span><span class="m">G. KUZNETSOV &middot; 31.4s</span></li>
+      <li><span class="t">Magic OS branding</span><span class="m">MILKINSIDE &middot; 10.0s</span></li>
+      <li><span class="t">Plasma globe</span><span class="m">PHYSICAL OBJECT &middot; ADDED LATER</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Anatomy</p>
+      <h2>The eight layers</h2>
+      <p>Every orb in the corpus is a subset of this stack, and no orb uses all of it. Which layers
+        you switch on is what produces a recognisable style. The order is also the render order, so
+        it maps directly onto shader passes.</p>
+    </div>
+    <div class="strata">
+      <div class="stratum"><span class="snum">00</span><span class="sname">Ground</span><span class="sdesc">Background, contact shadow, environment reflections</span></div>
+      <div class="stratum"><span class="snum">01</span><span class="sname">Medium</span><span class="sdesc">The substance filling the body &mdash; fluid, noise field, or void</span></div>
+      <div class="stratum"><span class="snum">02</span><span class="sname">Contents</span><span class="sdesc">Discrete bodies inside &mdash; lobes, ribbons, petals</span></div>
+      <div class="stratum"><span class="snum">03</span><span class="sname">Core</span><span class="sdesc">A single bright emissive point, sometimes with rays</span></div>
+      <div class="stratum"><span class="snum">04</span><span class="sname">Shell</span><span class="sdesc">Refractive boundary &mdash; fresnel rim, chromatic edge</span></div>
+      <div class="stratum"><span class="snum">05</span><span class="sname">Specular</span><span class="sdesc">One or two hard highlights that read as glass</span></div>
+      <div class="stratum"><span class="snum">06</span><span class="sname">Surface</span><span class="sdesc">Grain, striations, sparkle &mdash; detail at the finest scale</span></div>
+      <div class="stratum"><span class="snum">07</span><span class="sname">Mask</span><span class="sdesc">The circular clip and how soft its edge is</span></div>
+    </div>
+  </section>
+
+  <section id="reaction">
+    <div class="section-head">
+      <p class="eyebrow">Behaviour</p>
+      <h2>Reaction</h2>
+      <p>An orb that only loops is wallpaper. This one is wired to two independent signals the way a
+        real voice agent is: <strong>output</strong>, the energy of the agent&rsquo;s own speech, and
+        <strong>input</strong>, the energy of yours. They must never look the same.</p>
+    </div>
+
+    <div class="lab">
+      <div class="lab-stage">
+        <div class="specimen specimen-lab"><canvas id="labCanvas" data-mode="0"></canvas></div>
+        <p class="statereadout">State &middot; <b id="stateName">Idle</b></p>
+      </div>
+
+      <div class="controls">
+        <div class="ctl">
+          <span class="ctl-label">Agent speech &mdash; output signal</span>
+          <div class="btnrow">
+            <button type="button" id="btnSpeak">Speak a reply</button>
+            <button type="button" id="btnThink" aria-pressed="false">Thinking</button>
+            <button type="button" id="btnStop">Reset to idle</button>
+          </div>
+          <p class="note">Synthesised in the browser with Web Audio and read back through an
+            analyser &mdash; the orb is reacting to a real waveform, not a scripted animation.</p>
+        </div>
+
+        <div class="ctl">
+          <span class="ctl-label">Your voice &mdash; input signal</span>
+          <div class="btnrow">
+            <button type="button" id="btnMic" aria-pressed="false">Listen to my mic</button>
+            <button type="button" id="btnSim" aria-pressed="false">Simulate input</button>
+          </div>
+          <p class="note" id="micNote">Nothing is recorded, transmitted, or stored &mdash; the
+            level is read frame by frame and thrown away.</p>
+        </div>
+
+        <div class="ctl">
+          <span class="ctl-label">Finish</span>
+          <div class="btnrow" id="finishRow">
+            <button type="button" data-finish="0" aria-pressed="true">Ink</button>
+            <button type="button" data-finish="1" aria-pressed="false">Pearl</button>
+            <button type="button" data-finish="2" aria-pressed="false">Vessel</button>
+            <button type="button" data-finish="3" aria-pressed="false">Aurora</button>
+            <button type="button" data-finish="5" aria-pressed="false">Plasma</button>
+          </div>
+          <p class="note">On Plasma, move your pointer across the globe &mdash; the filaments reach
+            for it, the way they reach for a fingertip on real glass.</p>
+        </div>
+
+        <div class="meters">
+          <div class="meter">
+            <span class="meter-name">Output</span>
+            <span class="bar"><span id="barOut"></span></span>
+            <span class="meter-val" id="valOut">0.00</span>
+          </div>
+          <div class="meter">
+            <span class="meter-name">Input</span>
+            <span class="bar"><span id="barIn"></span></span>
+            <span class="meter-val" id="valIn">0.00</span>
+          </div>
+        </div>
+
+        <p class="labnote">
+          Output swells the body and accelerates the interior flow. Input never touches the body
+          &mdash; it fires a ring travelling outward from the centre and lifts the rim. That
+          asymmetry is the whole point: a person glancing at a still frame can tell who is talking.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Taxonomy</p>
+      <h2>Six archetypes</h2>
+      <p>Named by what they are made of, not by who made them. Four are safe defaults, one is a
+        specialty, and one belongs on a launch page and nowhere else.</p>
+    </div>
+
+    <div class="plates">
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="0"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Ink</h3><span class="verdict adopt">Adopt</span></div>
+          <p>One pigmented substance fills a rigid circle and churns. No shell, no contents, no
+            specular &mdash; colour saturates the entire body and motion comes from domain-warped
+            noise layered over a fluid field. It is the densest of the five, and the only one that
+            survives being cropped.</p>
+          <p>Its weakness hides in plain sight: with no shell and no highlight, grain is carrying the
+            realism almost single-handedly. Turn grain off and Ink collapses into a gradient.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>01 &middot; 06 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Light or dark</dd></div>
+            <div class="fact"><dt>Tempo</dt><dd>8&ndash;12s</dd></div>
+            <div class="fact"><dt>Seen in</dt><dd>ElevenLabs, AI Motion Visual</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="1"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Pearl</h3><span class="verdict adopt">Adopt</span></div>
+          <p>A pale, near-opaque body carries a narrow saturated band across its equator, with a hard
+            specular highlight and fine striations combed along the band. The most product-like of
+            the five, and the one that most reliably reads as an object rather than an effect.</p>
+          <p>Pearl borrows the page background as its body colour, which is exactly why it dissolves
+            on a dark theme. It does not get recoloured for dark mode &mdash; it gets replaced by
+            Aurora.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>00 &middot; 02 &middot; 05 &middot; 06 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Light only</dd></div>
+            <div class="fact"><dt>Tempo</dt><dd>5&ndash;8s</dd></div>
+            <div class="fact"><dt>Seen in</dt><dd>Pryon, Orb AI Motion</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="2"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Vessel</h3><span class="verdict adopt">Adopt</span></div>
+          <p>A transparent shell of constant size holds discrete inner bodies that drift, merge and
+            separate. The ratio of contents to shell is the signal: contents pressed against the
+            glass read as full attention, contents shrunk to the centre read as idle.</p>
+          <p>The most legible archetype for state, because the shell gives the eye a fixed ruler to
+            measure against. ElevenLabs&rsquo; own shipped component is structurally this &mdash;
+            seven soft ovals composited in polar space.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>02 &middot; 03 &middot; 04 &middot; 05 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Light or dark</dd></div>
+            <div class="fact"><dt>Tempo</dt><dd>6&ndash;10s</dd></div>
+            <div class="fact"><dt>Seen in</dt><dd>Voice reaction, Cirus, Magic OS</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="3"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Aurora</h3><span class="verdict adopt">Adopt</span></div>
+          <p>The body goes transparent to a dark ground and colour survives only as a luminous wave,
+            with a thin rim light doing the work of holding the silhouette together. Calm,
+            nocturnal, and quiet enough to sit beside a paragraph someone is reading.</p>
+          <p>Aurora and Pearl are the same design in two value structures. That pairing is the single
+            most useful thing in the corpus: dark mode is a light-model swap, not a palette swap.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>02 &middot; 04 &middot; 06 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Dark only</dd></div>
+            <div class="fact"><dt>Tempo</dt><dd>8&ndash;14s</dd></div>
+            <div class="fact"><dt>Seen in</dt><dd>Night mode for AI assistant</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="5"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Plasma</h3><span class="verdict">Specialty</span></div>
+          <p>A hard electrode at the centre throws branching filaments through an ionised haze to the
+            inside of the glass. The only archetype whose reference is a physical object rather than
+            a render, and the only one where the interior is made of <em>lines</em> instead of
+            fields.</p>
+          <p>It earns its place on one behaviour nothing else offers. A real plasma globe bends its
+            filaments toward whatever touches the glass, which gives input a literal, physical
+            reading: the orb reaches for the person speaking. Output brightens the discharge and
+            swells the core; input pulls the filaments outward until they bloom against the shell.</p>
+          <p>Marked specialty rather than default for honest reasons: filaments are the highest
+            frequency detail in the whole taxonomy, so it aliases into noise below roughly 96&nbsp;px,
+            and its haze only works on a dark field.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>02 &middot; 03 &middot; 04 &middot; 06 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Dark only</dd></div>
+            <div class="fact"><dt>Minimum size</dt><dd>96&nbsp;px</dd></div>
+            <div class="fact"><dt>Reference</dt><dd>Plasma globe, physical</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="plate">
+        <div class="plate-stage">
+          <div class="specimen specimen-plate"><canvas data-mode="4"></canvas></div>
+        </div>
+        <div class="plate-body">
+          <div class="plate-title"><h3>Prism</h3><span class="verdict">Hero only</span></div>
+          <p>Dense combed strands of the full spectrum sweep across an emissive sphere bright enough
+            to light its surroundings. Spectacular, and genuinely the right answer for a launch
+            moment or a brand film.</p>
+          <p>It is excluded from the component on purpose. With every hue already at maximum
+            saturation there is no headroom left to signal anything &mdash; the orb cannot get more
+            attentive or more alarmed, because it is already at eleven.</p>
+          <dl class="facts">
+            <div class="fact"><dt>Layers</dt><dd>00 &middot; 01 &middot; 06 &middot; 07</dd></div>
+            <div class="fact"><dt>Field</dt><dd>Dark only</dd></div>
+            <div class="fact"><dt>Tempo</dt><dd>15&ndash;25s</dd></div>
+            <div class="fact"><dt>Seen in</dt><dd>Colorful AI sphere</dd></div>
+          </dl>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Rules</p>
+      <h2>Eleven principles</h2>
+      <p>Each is falsifiable against the corpus &mdash; every rule below is a pattern that held
+        across pieces by different studios who were not copying each other.</p>
+    </div>
+    <div class="principles">
+
+      <div class="principle">
+        <span class="pid">P1</span>
+        <h3>Separate the vessel from the volatile</h3>
+        <p>Something must stay constant for change to be readable. Give the orb a stable identity
+          &mdash; silhouette, shell, rim &mdash; and let only the interior carry state.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P2</span>
+        <h3>Motion belongs to the interior</h3>
+        <p>The boundary should be the calmest thing in the composition. Hero renders deform their
+          silhouettes freely because they own the whole frame; a component sits next to focus rings
+          and text baselines. Budget &plusmn;2% radius, spend the rest inside.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P3</span>
+        <h3>Saturated colour is a minority</h3>
+        <p>In every reference that reads as premium rather than decorative, strong colour holds well
+          under half the area &mdash; a band, a wave, three lobes, a rim. Colour everywhere is the
+          signature of a screensaver.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P4</span>
+        <h3>Flip the light model, not the palette</h3>
+        <p>Light field: opaque pale body, tinted band, contact shadow. Dark field: transparent body,
+          emissive band, rim light. Recolouring one into the other produces mud.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P5</span>
+        <h3>One brightest point</h3>
+        <p>Every convincing orb has exactly one luminance peak &mdash; a specular, a core burst, a
+          caustic streak, a rim segment. It is what separates material from gradient. Two competing
+          peaks read as a rendering error.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P6</span>
+        <h3>Detail at the finest scale</h3>
+        <p>Grain, striations, sparkle. Past taste, it is functional: it defeats gradient banding on
+          8-bit displays and gives the eye something to resolve at rest. Never ship a perfectly
+          smooth orb.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P7</span>
+        <h3>Breath, not activity</h3>
+        <p>Ambient cycles in the corpus run 5&ndash;24 seconds; reactions run 0.8&ndash;1.5. Idle
+          motion has to be slow enough to sit beside text someone is reading.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P8</span>
+        <h3>State must survive a still frame</h3>
+        <p>Pause any frame of the strongest references and you can tell roughly what the system is
+          doing. If two states differ only in tempo, nobody can tell them apart in a screenshot
+          &mdash; or at a glance, which is how orbs are actually seen.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P9</span>
+        <h3>Never a centred radial gradient</h3>
+        <p>A symmetrical glow centred in a circle is the universal signature of a loading spinner.
+          Every reference breaks symmetry: bands sit off-equator, cores sit off-centre, waves lean.
+          Asymmetry is what makes an orb read as present rather than pending.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P11</span>
+        <h3>Detail is a function of size</h3>
+        <p>Every reference here is a hero render, so none of them had to survive being 32&nbsp;px in
+          a chat transcript. Below roughly 96&nbsp;px, grain and filaments stop reading as texture
+          and start reading as dither. The orb has to shed its own finest scale as it shrinks.</p>
+      </div>
+
+      <div class="principle">
+        <span class="pid">P10</span>
+        <h3>Hearing and speaking must not look alike</h3>
+        <p>Give the two signals different anatomy, not different amplitudes of the same move. Output
+          belongs to the body; input belongs to the boundary. When both are just &ldquo;bigger&rdquo;,
+          the orb stops reporting who holds the turn.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Failure modes</p>
+      <h2>Anti-patterns</h2>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th scope="col">Pattern</th><th scope="col">Why it fails</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Rainbow by default</td><td>Breaks P3 and leaves no headroom to signal state</td></tr>
+          <tr><td>Perfectly smooth gradient</td><td>Bands on real displays and reads as unfinished</td></tr>
+          <tr><td>Constant maximum motion</td><td>Nothing left to escalate to; fatigues in peripheral vision</td></tr>
+          <tr><td>Morphing silhouette</td><td>Breaks circular clipping, focus rings and layout</td></tr>
+          <tr><td>Two bright highlights</td><td>Reads as a rendering bug rather than a material</td></tr>
+          <tr><td>Dark mode by palette swap</td><td>Produces mud; the value structure has to invert</td></tr>
+          <tr><td>One meter for both voices</td><td>Input and output collapse into a single wobble and the turn-taking becomes unreadable</td></tr>
+          <tr><td>Level piped through React state</td><td>A re-render every animation frame; the loop must read a ref instead</td></tr>
+          <tr><td>Runtime texture from a CDN</td><td>Breaks offline development, strict CSP and air-gapped installs &mdash; the one real flaw in ElevenLabs&rsquo; shipped component</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <p class="eyebrow">Downstream</p>
+      <h2>What this changes in the component</h2>
+    </div>
+    <ol class="consequences">
+      <li><span class="cnum">01</span><span><strong>Finish becomes a first-class prop</strong> &mdash; <code>ink</code>, <code>pearl</code>, <code>vessel</code>, <code>aurora</code>, plus <code>plasma</code> as a documented specialty. Prism is deliberately excluded.</span></li>
+      <li><span class="cnum">02</span><span><strong>Dark mode is a light-model switch.</strong> Each preset declares both fields, and Pearl resolves to Aurora rather than being recoloured.</span></li>
+      <li><span class="cnum">03</span><span><strong>Two audio signals, never one.</strong> <code>outputLevel</code> drives the body; <code>inputLevel</code> drives the boundary.</span></li>
+      <li><span class="cnum">04</span><span><strong>Levels arrive as refs, not props</strong>, so a talking agent never triggers a React render.</span></li>
+      <li><span class="cnum">05</span><span><strong>The silhouette stays rigid.</strong> The wobble that makes hero renders feel alive is not adopted.</span></li>
+      <li><span class="cnum">06</span><span><strong>Nothing is fetched at runtime.</strong> Noise is generated in the shader; no textures, no CDN.</span></li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Super-AI-Components</span>
+    <span>Orb design language v1</span>
+    <span>Corpus of 11 &middot; reviewed frame by frame</span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var VERT = [
+    'attribute vec2 aPos;',
+    'varying vec2 vUv;',
+    'void main() {',
+    '  vUv = aPos * 0.5 + 0.5;',
+    '  gl_Position = vec4(aPos, 0.0, 1.0);',
+    '}'
+  ].join('\n');
+
+  var FRAG = [
+    'precision highp float;',
+    'varying vec2 vUv;',
+    'uniform float uTime;',
+    'uniform float uFlow;',
+    'uniform float uRing;',
+    'uniform int uMode;',
+    'uniform int uState;',
+    'uniform float uDark;',
+    'uniform float uIn;',
+    'uniform float uOut;',
+    'uniform vec2 uPointer;',
+    'uniform float uPtr;',
+    '',
+    'const float PI = 3.141592653589793;',
+    'const float TAU = 6.283185307179586;',
+    '',
+    'float hash21(vec2 p) {',
+    '  p = fract(p * vec2(123.34, 456.21));',
+    '  p += dot(p, p + 45.32);',
+    '  return fract(p.x * p.y);',
+    '}',
+    '',
+    'float noise2(vec2 p) {',
+    '  vec2 i = floor(p), f = fract(p);',
+    '  vec2 u = f * f * (3.0 - 2.0 * f);',
+    '  float a = hash21(i), b = hash21(i + vec2(1.0, 0.0));',
+    '  float c = hash21(i + vec2(0.0, 1.0)), d = hash21(i + vec2(1.0, 1.0));',
+    '  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);',
+    '}',
+    '',
+    'float fbm(vec2 p) {',
+    '  float v = 0.0, a = 0.5;',
+    '  mat2 rot = mat2(0.8776, 0.4794, -0.4794, 0.8776);',
+    '  for (int i = 0; i < 5; i++) {',
+    '    v += a * noise2(p);',
+    '    p = rot * p * 2.02 + vec2(37.1, 11.7);',
+    '    a *= 0.5;',
+    '  }',
+    '  return v;',
+    '}',
+    '',
+    'vec3 ramp(float t, vec3 c1, vec3 c2, vec3 c3) {',
+    '  t = clamp(t, 0.0, 1.0);',
+    '  return t < 0.5 ? mix(c1, c2, t * 2.0) : mix(c2, c3, (t - 0.5) * 2.0);',
+    '}',
+    '',
+    'vec3 hsv(float h, float s, float v) {',
+    '  vec3 k = abs(fract(vec3(h) + vec3(0.0, 2.0 / 3.0, 1.0 / 3.0)) * 6.0 - 3.0);',
+    '  return v * mix(vec3(1.0), clamp(k - 1.0, 0.0, 1.0), s);',
+    '}',
+    '',
+    'void main() {',
+    '  float grow = 1.0 + 0.020 * uOut - 0.008 * uIn;',
+    '  vec2 p = (vUv - 0.5) * 2.0 / grow;',
+    '  float r = length(p);',
+    '  float t = uTime;',
+    '  float fl = uFlow;',
+    '',
+    '  float bulge = sqrt(max(1.0 - min(dot(p, p), 1.0), 0.0));',
+    '  vec3 n = vec3(p, bulge);',
+    '  vec2 sp = p / (bulge * 0.55 + 1.0);',
+    '',
+    '  float warp = 1.0 + 1.15 * uOut;',
+    '  vec3 col = vec3(0.0);',
+    '  float alpha = 1.0 - smoothstep(0.982, 1.0, r);',
+    '',
+    '  if (uMode == 0) {',
+    '    vec2 q = vec2(fbm(sp * 1.9 + fl * 0.05), fbm(sp * 1.9 + vec2(5.2, 1.3) - fl * 0.04));',
+    '    vec2 w = vec2(fbm(sp * 1.9 + q * (2.1 * warp) + vec2(1.7, 9.2) + fl * 0.034),',
+    '                  fbm(sp * 1.9 + q * (2.1 * warp) + vec2(8.3, 2.8) - fl * 0.027));',
+    '    float f = fbm(sp * 2.2 + w * (1.6 * warp));',
+    '    col = ramp(f * 1.5 - 0.18, vec3(0.85, 0.16, 0.06), vec3(0.97, 0.47, 0.12), vec3(1.0, 0.83, 0.55));',
+    '    col *= 0.72 + 0.5 * bulge;',
+    '    col += pow(1.0 - bulge, 3.5) * 0.1;',
+    '    col *= 1.0 + 0.22 * uOut;',
+    '  }',
+    '',
+    '  else if (uMode == 1) {',
+    '    float wob = fbm(sp * 1.5 + fl * 0.07);',
+    '    float wave = 0.17 * sin(sp.x * 1.9 + fl * 0.36) + 0.14 * (wob - 0.5);',
+    '    float width = 0.40 + 0.16 * uOut;',
+    '    float band = smoothstep(width, 0.02, abs(sp.y - wave));',
+    '    vec3 pale = vec3(0.955, 0.945, 0.955);',
+    '    vec3 bandCol = ramp(sp.x * 0.5 + 0.5 + 0.12 * (wob - 0.5),',
+    '                        vec3(0.98, 0.62, 0.78), vec3(0.86, 0.74, 0.95), vec3(0.55, 0.79, 0.98));',
+    '    col = mix(pale, bandCol, band * (0.80 + 0.16 * uOut));',
+    '    float striate = 0.5 + 0.5 * sin(sp.x * 40.0 + wob * 11.0 + fl * 0.24);',
+    '    col *= 1.0 - 0.045 * striate * band;',
+    '    col *= 0.80 + 0.34 * bulge;',
+    '    vec3 L = normalize(vec3(-0.42, 0.58, 0.70));',
+    '    col += vec3(1.0) * pow(max(dot(normalize(n), L), 0.0), 34.0) * 0.85;',
+    '    col += vec3(0.9, 0.93, 1.0) * pow(1.0 - bulge, 6.0) * 0.28;',
+    '  }',
+    '',
+    '  else if (uMode == 2) {',
+    '    vec3 acc = vec3(0.0);',
+    '    float field = 0.0;',
+    '    float spread = 0.20 + 0.16 * uOut + 0.04 * sin(fl * 0.3);',
+    '    float mass = 0.090 + 0.045 * uOut;',
+    '    for (int i = 0; i < 3; i++) {',
+    '      float fi = float(i);',
+    '      float orbit = spread + 0.05 * sin(fl * 0.37 + fi * 1.7);',
+    '      vec2 c = vec2(cos(fl * 0.42 + fi * 2.094), sin(fl * 0.35 + fi * 2.094)) * orbit;',
+    '      float w = mass / (dot(p - c, p - c) + 0.030);',
+    '      vec3 lc = fi < 0.5 ? vec3(0.28, 0.66, 0.99)',
+    '              : (fi < 1.5 ? vec3(0.99, 0.68, 0.26) : vec3(0.63, 0.42, 0.98));',
+    '      field += w;',
+    '      acc += w * lc;',
+    '    }',
+    '    vec3 inner = acc / max(field, 0.0001);',
+    '    float body = smoothstep(0.95, 2.30, field);',
+    '    vec3 ground = mix(vec3(0.965, 0.965, 0.978), vec3(0.050, 0.060, 0.080), uDark);',
+    '    col = mix(ground, inner, body * 0.95);',
+    '    float rim = smoothstep(0.66, 0.99, r) * smoothstep(1.0, 0.90, r);',
+    '    vec3 rimCol = mix(vec3(0.55, 0.76, 0.94), vec3(0.52, 0.84, 1.0), uDark);',
+    '    col += rimCol * rim * (0.46 + 0.34 * uDark);',
+    '    col += vec3(1.0) * pow(1.0 - bulge, 7.0) * 0.20;',
+    '    vec3 L2 = normalize(vec3(-0.40, 0.60, 0.69));',
+    '    col += vec3(1.0) * pow(max(dot(normalize(n), L2), 0.0), 46.0) * 0.55;',
+    '  }',
+    '',
+    '  else if (uMode == 3) {',
+    '    float wob = fbm(sp * 1.35 - fl * 0.055);',
+    '    float wave = 0.16 * sin(sp.x * 1.7 - fl * 0.29) + 0.16 * (wob - 0.5);',
+    '    float width = 0.46 + 0.18 * uOut;',
+    '    float band = smoothstep(width, 0.0, abs(sp.y - wave - 0.06));',
+    '    band = pow(band, 1.35);',
+    '    vec3 glow = ramp(sp.x * 0.45 + 0.5 + 0.2 * (wob - 0.5),',
+    '                     vec3(0.16, 0.52, 0.96), vec3(0.35, 0.83, 0.99), vec3(0.62, 0.42, 0.98));',
+    '    col = vec3(0.026, 0.032, 0.05);',
+    '    col += glow * band * (1.02 + 0.45 * uOut);',
+    '    float rim = smoothstep(0.80, 0.995, r) * smoothstep(1.0, 0.94, r);',
+    '    col += vec3(0.55, 0.76, 0.98) * rim * 0.85;',
+    '    col += vec3(0.30, 0.55, 0.85) * pow(1.0 - bulge, 5.0) * 0.16;',
+    '  }',
+    '',
+    '  else if (uMode == 4) {',
+    '    float ang = atan(p.y, p.x);',
+    '    float flow = fbm(vec2(ang * 1.15, r * 1.9 - fl * 0.11));',
+    '    float h = fract(flow * 0.85 + r * 0.30 + fl * 0.014);',
+    '    col = hsv(h, 0.80, 1.0);',
+    '    col *= 0.90 + 0.10 * sin(flow * 30.0);',
+    '    col *= 0.60 + 0.56 * bulge;',
+    '    col += pow(1.0 - bulge, 4.0) * 0.16;',
+    '  }',
+    '',
+    '  else {',
+    '    float a = atan(p.y, p.x);',
+    '    float haze = pow(max(1.0 - r, 0.0), 1.35);',
+    '    col = mix(vec3(0.020, 0.035, 0.20), vec3(0.09, 0.21, 0.92), haze * 0.92);',
+    '    col *= 0.50 + 0.72 * bulge;',
+    '',
+    '    float pAng = atan(uPointer.y, uPointer.x);',
+    '    float bolts = 0.0;',
+    '    float contact = 0.0;',
+    '',
+    '    for (int i = 0; i < 9; i++) {',
+    '      float fi = float(i);',
+    '      float seed = fi * 17.31 + 3.7;',
+    '      float phase = fi * (TAU / 9.0) + (fbm(vec2(seed, fl * 0.09)) - 0.5) * 2.6;',
+    '',
+    '      float pull = uPtr * (0.42 + 0.46 * fract(fi * 0.37));',
+    '      float dd = mod(pAng - phase + PI, TAU) - PI;',
+    '      phase += dd * pull;',
+    '',
+    '      float slow = (fbm(vec2(seed * 0.61 + r * 1.35, fl * 0.40)) - 0.5) * 1.55;',
+    '      float fine = (fbm(vec2(seed * 1.9 + r * 3.1, fl * 0.62)) - 0.5) * 0.42;',
+    '      float wander = (slow + fine) * pow(r, 1.15);',
+    '      wander *= 1.0 - 0.42 * uPtr;',
+    '',
+    '      float d = mod(a - phase - wander + PI, TAU) - PI;',
+    '      float arc = abs(d) * max(r, 0.05);',
+    '      float width = 0.007 + 0.020 * r;',
+    '      float line = smoothstep(width, 0.0, arc);',
+    '      float halo = smoothstep(width * 4.5, 0.0, arc) * 0.30;',
+    '',
+    '      float span = 0.80 + 0.20 * fract(seed * 0.113) + 0.20 * uIn;',
+    '      line *= smoothstep(0.10, 0.28, r) * smoothstep(span + 0.22, span - 0.12, r);',
+    '      halo *= smoothstep(0.10, 0.34, r) * smoothstep(span + 0.24, span - 0.14, r);',
+    '',
+    '      float flick = 0.35 + 0.65 * fbm(vec2(seed, fl * 2.6));',
+    '      line *= flick; halo *= flick;',
+    '',
+    '      bolts += line + halo;',
+    '      contact += line * smoothstep(span - 0.26, span + 0.04, r);',
+    '    }',
+    '',
+    '    bolts = clamp(bolts * (1.0 + 1.05 * uOut), 0.0, 1.8);',
+    '    contact = clamp(contact, 0.0, 1.5);',
+    '',
+    '    vec3 fil = vec3(0.88, 0.90, 1.0);',
+    '    col += fil * bolts * (0.82 + 0.38 * uOut);',
+    '    col += vec3(0.80, 0.62, 1.0) * contact * (0.50 + 2.4 * uIn);',
+    '',
+    '    float coreR = 0.13 + 0.040 * uOut;',
+    '    float core = smoothstep(coreR, 0.0, r);',
+    '    col += vec3(0.72, 0.40, 1.0) * pow(smoothstep(0.34, 0.0, r), 2.0) * (0.55 + 0.35 * uOut);',
+    '    col += mix(vec3(0.90, 0.60, 1.0), vec3(1.0, 0.97, 1.0), core) * core * 1.30;',
+    '',
+    '    float grim = smoothstep(0.84, 0.995, r) * smoothstep(1.0, 0.92, r);',
+    '    col += vec3(0.42, 0.60, 1.0) * grim * (0.55 + 0.9 * uIn);',
+    '  }',
+    '',
+    '  if (uState == 2) {',
+    '    float a = atan(p.y, p.x);',
+    '    float sweep = 0.5 + 0.5 * cos(a - fl * 1.5);',
+    '    vec3 sc = mix(vec3(0.35, 0.55, 0.95), vec3(0.45, 0.85, 0.95), uDark);',
+    '    col += sc * pow(sweep, 7.0) * 0.40 * smoothstep(0.05, 0.85, r);',
+    '  }',
+    '',
+    '  if (uIn > 0.004 && uMode != 5) {',
+    '    float pd = fract(r * 1.35 - uRing);',
+    '    float pulse = smoothstep(0.0, 0.30, pd) - smoothstep(0.30, 0.62, pd);',
+    '    vec3 pc = mix(vec3(0.30, 0.72, 0.80), vec3(0.42, 0.92, 0.99), uDark);',
+    '    col += pc * pulse * uIn * 1.15 * smoothstep(0.10, 0.95, r);',
+    '    float rim2 = smoothstep(0.74, 0.995, r) * smoothstep(1.0, 0.90, r);',
+    '    col += pc * rim2 * uIn * 1.5;',
+    '  }',
+    '',
+    '  float grain = hash21(vUv * 780.0 + fract(t) * 91.0);',
+    '  col *= 1.0 - 0.052 * (grain - 0.5) * 2.0;',
+    '',
+    '  gl_FragColor = vec4(clamp(col, 0.0, 1.0) * alpha, alpha);',
+    '}'
+  ].join('\n');
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function isDark() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'dark') return 1;
+    if (attr === 'light') return 0;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 0;
+  }
+
+  function compile(gl, type, src) {
+    var s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
+  }
+
+  var instances = [];
+
+  function init(canvas) {
+    var gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: true });
+    if (!gl) {
+      canvas.parentElement.style.background =
+        'radial-gradient(circle at 34% 30%, #f8a05a, #d5391a 68%)';
+      return null;
+    }
+
+    var vs = compile(gl, gl.VERTEX_SHADER, VERT);
+    var fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    if (!vs || !fs) return null;
+
+    var prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(prog));
+      return null;
+    }
+    gl.useProgram(prog);
+
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'aPos');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    var inst = {
+      gl: gl,
+      canvas: canvas,
+      u: {
+        time: gl.getUniformLocation(prog, 'uTime'),
+        flow: gl.getUniformLocation(prog, 'uFlow'),
+        ring: gl.getUniformLocation(prog, 'uRing'),
+        mode: gl.getUniformLocation(prog, 'uMode'),
+        state: gl.getUniformLocation(prog, 'uState'),
+        dark: gl.getUniformLocation(prog, 'uDark'),
+        din: gl.getUniformLocation(prog, 'uIn'),
+        dout: gl.getUniformLocation(prog, 'uOut'),
+        ptrPos: gl.getUniformLocation(prog, 'uPointer'),
+        ptr: gl.getUniformLocation(prog, 'uPtr')
+      },
+      mode: parseInt(canvas.getAttribute('data-mode'), 10) || 0,
+      interactive: canvas.id === 'labCanvas',
+      visible: true
+    };
+
+    instances.push(inst);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        inst.visible = entries[0].isIntersecting;
+      }, { rootMargin: '140px' }).observe(canvas);
+    }
+
+    return inst;
+  }
+
+  function resize(inst) {
+    var rect = inst.canvas.getBoundingClientRect();
+    if (!rect.width) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = Math.round(rect.width * dpr);
+    var h = Math.round(rect.height * dpr);
+    if (inst.canvas.width !== w || inst.canvas.height !== h) {
+      inst.canvas.width = w;
+      inst.canvas.height = h;
+      inst.gl.viewport(0, 0, w, h);
+    }
+  }
+
+  var canvases = document.querySelectorAll('.specimen canvas');
+  for (var i = 0; i < canvases.length; i++) init(canvases[i]);
+
+  /* ---------------- audio ---------------- */
+
+  var live = {
+    inRaw: 0, outRaw: 0,
+    inLevel: 0, outLevel: 0,
+    state: 0,
+    finish: 0,
+    flow: 0,
+    ring: 0,
+    ptrX: 0.7, ptrY: 0.5, ptrOn: 0, ptrTarget: 0
+  };
+
+  /* Plasma globes reach toward whatever touches the glass — so does this one. */
+  var labStage = document.getElementById('labCanvas');
+  if (labStage) {
+    var track = function (e) {
+      var rect = labStage.getBoundingClientRect();
+      var pt = e.touches ? e.touches[0] : e;
+      var nx = ((pt.clientX - rect.left) / rect.width - 0.5) * 2;
+      var ny = -((pt.clientY - rect.top) / rect.height - 0.5) * 2;
+      var len = Math.sqrt(nx * nx + ny * ny) || 1;
+      live.ptrX = nx / len;
+      live.ptrY = ny / len;
+      live.ptrTarget = 1;
+    };
+    labStage.addEventListener('pointermove', track);
+    labStage.addEventListener('pointerdown', track);
+    labStage.addEventListener('pointerleave', function () { live.ptrTarget = 0; });
+    labStage.style.touchAction = 'none';
+  }
+
+  var ac = null, outAnalyser = null, inAnalyser = null, micStream = null;
+  var outBuf = null, inBuf = null;
+  var simInput = false, speaking = false;
+
+  function audioCtx() {
+    if (!ac) {
+      var C = window.AudioContext || window.webkitAudioContext;
+      if (!C) return null;
+      ac = new C();
+    }
+    if (ac.state === 'suspended') ac.resume();
+    return ac;
+  }
+
+  var elState = document.getElementById('stateName');
+  var elBarIn = document.getElementById('barIn');
+  var elBarOut = document.getElementById('barOut');
+  var elValIn = document.getElementById('valIn');
+  var elValOut = document.getElementById('valOut');
+  var elMicNote = document.getElementById('micNote');
+  var btnMic = document.getElementById('btnMic');
+  var btnSim = document.getElementById('btnSim');
+  var btnSpeak = document.getElementById('btnSpeak');
+  var btnThink = document.getElementById('btnThink');
+  var btnStop = document.getElementById('btnStop');
+
+  var STATE_NAMES = ['Idle', 'Listening', 'Thinking', 'Speaking'];
+
+  /* Synthesised reply: a voiced source shaped into syllables, measured by an analyser. */
+  function speak() {
+    var ctx = audioCtx();
+    if (!ctx || speaking) return;
+    speaking = true;
+    if (btnThink) btnThink.setAttribute('aria-pressed', 'false');
+
+    var now = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+
+    var vib = ctx.createOscillator();
+    var vibGain = ctx.createGain();
+    vib.frequency.value = 4.6;
+    vibGain.gain.value = 3.2;
+    vib.connect(vibGain).connect(osc.frequency);
+
+    var formant = ctx.createBiquadFilter();
+    formant.type = 'bandpass';
+    formant.frequency.value = 780;
+    formant.Q.value = 3.2;
+
+    var tone = ctx.createBiquadFilter();
+    tone.type = 'lowpass';
+    tone.frequency.value = 2400;
+
+    var gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, now);
+
+    var out = ctx.createGain();
+    out.gain.value = 0.5;
+
+    outAnalyser = ctx.createAnalyser();
+    outAnalyser.fftSize = 512;
+    outAnalyser.smoothingTimeConstant = 0.55;
+    outBuf = new Uint8Array(outAnalyser.frequencyBinCount);
+
+    osc.connect(formant).connect(tone).connect(gain);
+    gain.connect(outAnalyser);
+    gain.connect(out).connect(ctx.destination);
+
+    /* syllable pattern with two breath pauses, roughly a sentence and a half */
+    var pattern = [
+      [0.16, 0.85], [0.13, 0.62], [0.20, 0.95], [0.11, 0.55], [0.17, 0.78],
+      [0.26, 0.40],
+      [0.14, 0.70], [0.19, 0.92], [0.12, 0.58], [0.22, 0.86], [0.13, 0.64],
+      [0.30, 0.30],
+      [0.18, 0.80], [0.15, 0.66], [0.24, 0.98], [0.13, 0.52], [0.20, 0.74]
+    ];
+
+    var tt = now + 0.04;
+    var pitch = 118;
+    osc.frequency.setValueAtTime(pitch, tt);
+
+    for (var i = 0; i < pattern.length; i++) {
+      var dur = pattern[i][0];
+      var amp = pattern[i][1];
+      var isPause = amp < 0.45;
+      var peak = isPause ? 0.004 : 0.10 * amp;
+
+      gain.gain.linearRampToValueAtTime(peak, tt + dur * 0.32);
+      gain.gain.linearRampToValueAtTime(peak * 0.72, tt + dur * 0.7);
+      gain.gain.linearRampToValueAtTime(isPause ? 0.0008 : 0.006, tt + dur);
+
+      var target = 96 + Math.sin(i * 1.31) * 26 + (isPause ? -14 : 0);
+      osc.frequency.linearRampToValueAtTime(target, tt + dur);
+      formant.frequency.linearRampToValueAtTime(560 + Math.abs(Math.sin(i * 0.9)) * 620, tt + dur);
+
+      tt += dur;
+    }
+
+    gain.gain.linearRampToValueAtTime(0.0001, tt + 0.22);
+
+    osc.start(now);
+    vib.start(now);
+    osc.stop(tt + 0.4);
+    vib.stop(tt + 0.4);
+
+    live.state = 3;
+
+    osc.onended = function () {
+      speaking = false;
+      outAnalyser = null;
+      live.outRaw = 0;
+      if (live.state === 3) live.state = micStream || simInput ? 1 : 0;
+    };
+  }
+
+  function stopAll() {
+    live.state = micStream || simInput ? 1 : 0;
+    if (btnThink) btnThink.setAttribute('aria-pressed', 'false');
+  }
+
+  if (btnSpeak) btnSpeak.addEventListener('click', speak);
+
+  if (btnThink) {
+    btnThink.addEventListener('click', function () {
+      var on = btnThink.getAttribute('aria-pressed') === 'true';
+      btnThink.setAttribute('aria-pressed', on ? 'false' : 'true');
+      live.state = on ? (micStream || simInput ? 1 : 0) : 2;
+    });
+  }
+
+  if (btnStop) btnStop.addEventListener('click', stopAll);
+
+  if (btnMic) {
+    btnMic.addEventListener('click', function () {
+      if (micStream) {
+        micStream.getTracks().forEach(function (tr) { tr.stop(); });
+        micStream = null;
+        inAnalyser = null;
+        live.inRaw = 0;
+        btnMic.setAttribute('aria-pressed', 'false');
+        btnMic.textContent = 'Listen to my mic';
+        if (live.state === 1) live.state = simInput ? 1 : 0;
+        return;
+      }
+
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        elMicNote.textContent = 'This browser will not expose a microphone here. Use Simulate input to see the same behaviour.';
+        btnMic.disabled = true;
+        return;
+      }
+
+      btnMic.textContent = 'Requesting…';
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        var ctx = audioCtx();
+        if (!ctx) return;
+        micStream = stream;
+        var src = ctx.createMediaStreamSource(stream);
+        inAnalyser = ctx.createAnalyser();
+        inAnalyser.fftSize = 512;
+        inAnalyser.smoothingTimeConstant = 0.6;
+        inBuf = new Uint8Array(inAnalyser.frequencyBinCount);
+        src.connect(inAnalyser);
+        btnMic.setAttribute('aria-pressed', 'true');
+        btnMic.textContent = 'Stop listening';
+        elMicNote.textContent = 'Listening. Nothing is recorded or transmitted — the level is read each frame and discarded.';
+        if (live.state !== 3) live.state = 1;
+      }).catch(function () {
+        btnMic.textContent = 'Listen to my mic';
+        elMicNote.textContent = 'Microphone unavailable in this frame. Use Simulate input to see the same behaviour.';
+      });
+    });
+  }
+
+  if (btnSim) {
+    btnSim.addEventListener('click', function () {
+      simInput = !simInput;
+      btnSim.setAttribute('aria-pressed', simInput ? 'true' : 'false');
+      if (simInput && live.state !== 3) live.state = 1;
+      if (!simInput) {
+        live.inRaw = 0;
+        if (live.state === 1 && !micStream) live.state = 0;
+      }
+    });
+  }
+
+  var finishRow = document.getElementById('finishRow');
+  if (finishRow) {
+    finishRow.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-finish]');
+      if (!b) return;
+      var btns = finishRow.querySelectorAll('button[data-finish]');
+      for (var i = 0; i < btns.length; i++) btns[i].setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-pressed', 'true');
+      live.finish = parseInt(b.getAttribute('data-finish'), 10);
+    });
+  }
+
+  function rms(analyser, buf) {
+    if (!analyser) return 0;
+    analyser.getByteFrequencyData(buf);
+    var sum = 0, n = Math.min(buf.length, 160);
+    for (var i = 0; i < n; i++) sum += buf[i] * buf[i];
+    return Math.min(1, Math.sqrt(sum / n) / 96);
+  }
+
+  /* ---------------- loop ---------------- */
+
+  var start = null, last = null;
+
+  function frame(now) {
+    if (start === null) { start = now; last = now; }
+    var t = (now - start) / 1000;
+    var dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+
+    live.outRaw = outAnalyser ? rms(outAnalyser, outBuf) : 0;
+
+    if (micStream && inAnalyser) {
+      live.inRaw = rms(inAnalyser, inBuf);
+    } else if (simInput) {
+      var s = Math.sin(t * 2.3) * 0.5 + 0.5;
+      var s2 = Math.sin(t * 5.7 + 1.1) * 0.5 + 0.5;
+      live.inRaw = Math.max(0, (s * 0.65 + s2 * 0.35) - 0.28) * 0.95;
+    } else if (!micStream) {
+      live.inRaw = 0;
+    }
+
+    live.outLevel += (live.outRaw - live.outLevel) * Math.min(1, dt * 11);
+    live.inLevel += (live.inRaw - live.inLevel) * Math.min(1, dt * 11);
+
+    live.flow += dt * (1 + live.outLevel * 3.2);
+    live.ring += dt * (0.42 + live.inLevel * 0.5);
+    live.ptrOn += (live.ptrTarget - live.ptrOn) * Math.min(1, dt * 5);
+
+    if (elBarOut) {
+      elBarOut.style.width = (live.outLevel * 100).toFixed(1) + '%';
+      elBarIn.style.width = (live.inLevel * 100).toFixed(1) + '%';
+      elValOut.textContent = live.outLevel.toFixed(2);
+      elValIn.textContent = live.inLevel.toFixed(2);
+      elState.textContent = STATE_NAMES[live.state];
+    }
+
+    var dark = isDark();
+
+    for (var i = 0; i < instances.length; i++) {
+      var inst = instances[i];
+      if (!inst.visible) continue;
+      resize(inst);
+      var gl = inst.gl;
+      var interactive = inst.interactive;
+
+      gl.uniform1f(inst.u.time, reduce ? 6.0 : t);
+      gl.uniform1f(inst.u.flow, reduce ? 6.0 : (interactive ? live.flow : t));
+      gl.uniform1f(inst.u.ring, live.ring);
+      gl.uniform1i(inst.u.mode, interactive ? live.finish : inst.mode);
+      gl.uniform1i(inst.u.state, interactive ? live.state : 0);
+      gl.uniform1f(inst.u.dark, dark);
+      gl.uniform1f(inst.u.din, interactive ? live.inLevel : 0);
+      gl.uniform1f(inst.u.dout, interactive ? live.outLevel : 0);
+
+      if (interactive) {
+        gl.uniform2f(inst.u.ptrPos, live.ptrX, live.ptrY);
+        gl.uniform1f(inst.u.ptr, live.ptrOn);
+      } else {
+        var amb = t * 0.22 + inst.mode;
+        gl.uniform2f(inst.u.ptrPos, Math.cos(amb), Math.sin(amb));
+        gl.uniform1f(inst.u.ptr, inst.mode === 5 ? 0.22 : 0);
+      }
+
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>
