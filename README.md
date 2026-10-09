@@ -6,6 +6,10 @@ listening, thinking, or speaking.
 Zero runtime dependencies. One WebGL fragment program renders all five finishes; nothing is
 fetched at runtime.
 
+![The AI-Orb playground in light mode: the ink finish in the ember palette, with finish, palette, state and audio controls and the rest of the page below](docs/screenshots/orb-playground.webp)
+
+*The playground (`npm run dev`), captured from a local dev run.*
+
 ## What's here
 
 | Path | What it is |
@@ -18,8 +22,15 @@ fetched at runtime.
 ```bash
 npm install
 npm run dev        # playground at http://localhost:5178
+npm run build      # production build of the playground
 npm run typecheck
 ```
+
+## Screenshots
+
+![The same playground on a dark page, where the ink orb sits on a near-black field](docs/screenshots/orb-playground-dark.webp)
+
+The playground under a dark colour scheme, captured from a local dev run.
 
 The static style guide needs no build at all:
 
@@ -94,8 +105,7 @@ small sizes, and recovery from WebGL context loss.
 
 - Zero runtime dependencies — no three.js, no R3F, no OGL
 - Nothing fetched at runtime; noise is generated in-shader
-- SSR-safe, with a poster frame for `prefers-reduced-motion` and no-WebGL
-- One live canvas at a time; static poster for every other instance
+- SSR-safe, with a single still frame under `prefers-reduced-motion` and a CSS-gradient fallback when WebGL is unavailable
 
 ## Prior art
 
