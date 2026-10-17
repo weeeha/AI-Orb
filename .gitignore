@@ -2,3 +2,12 @@ node_modules
 dist
 .DS_Store
 *.log
+
+# Claude Code worktrees: nested checkouts, never part of the package.
+.claude/worktrees/
+
+# The consumer harness installs the packed package and writes its own output.
+harness/consumer/*.tgz
+harness/consumer/node_modules
+harness/consumer/screenshots/
+harness/consumer/dist/
