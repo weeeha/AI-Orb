@@ -1,0 +1,9 @@
+:root { color-scheme: light; }
+body { margin: 0; background: #ffffff; color: #1a1a1a; font: 16px/1.4 system-ui, sans-serif; }
+main { max-width: 720px; margin: 0 auto; padding: 24px 16px; }
+h1 { font-size: 20px; margin: 0 0 16px; }
+h2 { font-size: 14px; margin: 16px 0 6px; }
+.stage { display: flex; gap: 24px; }
+.slot { width: 240px; height: 240px; }
+button { font: inherit; padding: 4px 10px; margin: 0 6px 6px 0; border: 1px solid #555; background: #fff; color: #1a1a1a; border-radius: 4px; cursor: pointer; }
+button[aria-pressed="true"] { background: #1a1a1a; color: #fff; }

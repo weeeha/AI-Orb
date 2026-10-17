@@ -1,0 +1,24 @@
+{
+  "name": "ai-orb-consumer-harness",
+  "private": true,
+  "type": "module",
+  "description": "A consumer of ai-orb installed from its packed tarball. Exists to prove the package resolves, compiles, renders, re-themes and passes axe from outside its own repo.",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "smoke": "node smoke.mjs"
+  },
+  "dependencies": {
+    "ai-orb": "file:ai-orb.tgz",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "playwright": "1.62.1",
+    "typescript": "5.9.3",
+    "vite": "8.2.1"
+  }
+}

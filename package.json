@@ -9,12 +9,21 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "files": ["src", "docs", "README.md"],
+  "files": [
+    "src",
+    "docs/style-guide.md",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "harness:pack": "node harness/pack.mjs",
+    "harness:install": "npm run harness:pack && cd harness/consumer && rm -rf node_modules/ai-orb && npm install --no-package-lock --no-audit --no-fund",
+    "harness:build": "cd harness/consumer && npm run build",
+    "harness:smoke": "cd harness/consumer && npm run smoke",
+    "harness": "npm run harness:install && npm run harness:build && npm run harness:smoke"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -29,5 +38,13 @@
     "typescript": "^5.7.2",
     "vite": "^6.0.5"
   },
-  "keywords": ["orb", "webgl", "shader", "voice", "ai", "react", "audio-reactive"]
+  "keywords": [
+    "orb",
+    "webgl",
+    "shader",
+    "voice",
+    "ai",
+    "react",
+    "audio-reactive"
+  ]
 }
