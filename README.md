@@ -1,5 +1,7 @@
 # AI-Orb
 
+![AI-Orb](brand/lockup-horizontal.svg)
+
 An audio-reactive orb for AI voice interfaces — the visual presence of an agent that is idle,
 listening, thinking, or speaking.
 
