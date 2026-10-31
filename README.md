@@ -2,6 +2,14 @@
 
 ![AI-Orb](brand/lockup-horizontal.svg)
 
+**Problem.** A voice agent on screen has to show who holds the turn. When hearing and speaking both just make the orb bigger, the user can't tell whether the agent is listening or talking.
+
+**Idea.** Split the two signals. The agent's voice drives the body (interior flow, warp, core brightness); the user's voice drives the boundary (an outward ring, rim lift). Dark mode changes the light model and keeps the palette.
+
+**Built.** A React `<Orb>` with five finishes rendered by one WebGL fragment program, zero runtime dependencies, plus a playground and a live style guide. 12 commits on 7 days, Jul 31 to Oct 25, 2026.
+
+**Decision.** No three.js or R3F, and no noise texture loaded from a CDN, which is the route ElevenLabs UI takes. Noise is generated in the shader, so nothing is fetched at runtime.
+
 An audio-reactive orb for AI voice interfaces — the visual presence of an agent that is idle,
 listening, thinking, or speaking.
 
